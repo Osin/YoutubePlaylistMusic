@@ -2,6 +2,7 @@
 using Ookii.Dialogs.Wpf;
 using System.IO;
 using System;
+using System.Windows.Navigation;
 
 namespace Youtube_Playlist_Music
 {
@@ -33,7 +34,19 @@ namespace Youtube_Playlist_Music
                     this.local_worker.files.AddRange(files.FindAll(s => s.Contains(".mp4")));
                     this.local_worker.files.AddRange(files.FindAll(s => s.Contains(".m4a")));
                     this.local_worker.files.AddRange(files.FindAll(s => s.Contains(".flac")));
-                    this.local_worker.generateDataBase();
+                    bool databaseIsGenerate = this.local_worker.generateDataBase();
+                    if (databaseIsGenerate == false) { 
+                        MessageBoxResult result = MessageBox.Show("Erreur lors du scan du dossier",
+                        "Je ne sais pas quoi faire pour vous aidez, désolé!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else {
+                        tblResult.Text = "Vous avez " + files.Count + " éléments scannés depuis votre bibliothèque. Veuillez vous connecter à Youtube pour créer votre playlist";
+                        btResult.Visibility = System.Windows.Visibility.Visible;
+                        btChoseDir.Visibility = System.Windows.Visibility.Hidden;
+                        NavigationWindow window = new NavigationWindow();
+                        window.Source = new Uri("http://www.google.com");
+                        window.Show();
+                        }
                 }
                 else
                 {
@@ -44,6 +57,11 @@ namespace Youtube_Playlist_Music
                 }
                 
             }
+        }
+
+        private void btResult_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

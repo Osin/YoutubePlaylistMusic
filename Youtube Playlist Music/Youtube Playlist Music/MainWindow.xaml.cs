@@ -37,7 +37,7 @@ namespace Youtube_Playlist_Music
                     bool databaseIsGenerate = this.local_worker.generateDataBase();
                     if (databaseIsGenerate == false) { 
                         MessageBoxResult result = MessageBox.Show("Erreur lors du scan du dossier",
-                        "Je ne sais pas quoi faire pour vous aidez, désolé!", MessageBoxButton.OK, MessageBoxImage.Error);
+                        "Je ne sais pas quoi faire pour vous aider, désolé!", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     else {
                         tblResult.Text = "Vous avez " + files.Count + " éléments scannés depuis votre bibliothèque. Veuillez vous connecter à Youtube pour créer votre playlist";

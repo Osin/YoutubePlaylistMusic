@@ -1,13 +1,15 @@
 ﻿<Window x:Class="Youtube_Playlist_Music.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="500" Width="800" WindowStyle="ThreeDBorderWindow">
     <Grid>
-        <Label Content="Youtube Music Playlist Generator" HorizontalAlignment="Center" Margin="10,10,5,0" VerticalAlignment="Top" FontSize="24"/>
-        <Button x:Name="btChoseDir" Content="Choisir" HorizontalAlignment="Right" Margin="0,57,10,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <Label Content="Dossier contenant ma bibliothèque de musique" HorizontalAlignment="Left" Margin="10,55,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.066,-0.365"/>
-        <Button x:Name="btResult" Content="Me connecter à Youtube" HorizontalAlignment="Center" Margin="81,119,76,0" VerticalAlignment="Top" Width="360" Click="btResult_Click" Visibility="Hidden"/>
-        <TextBlock x:Name="tblResult" HorizontalAlignment="Left" Margin="81,86,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="28" Width="360" Visibility="Hidden"/>
-
+        <Label Content="Youtube Music Playlist Generator" HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Top" FontSize="24"/>
+        <Button x:Name="btChoseDir" Content="Choisir" HorizontalAlignment="Right" Margin="10,70,10,10" VerticalAlignment="Top" Click="Button_Click"/>
+        <Label x:Name="lbInfos" Content="Dossier contenant ma bibliothèque de musique" HorizontalAlignment="Left" Margin="10,70,10,10" VerticalAlignment="Top" RenderTransformOrigin="1.066,-0.365"/>
+        <Button x:Name="btResult" Content="Me connecter à Youtube" HorizontalAlignment="Right" Margin="10,110,10,10" VerticalAlignment="Top" Click="btResult_Click" Visibility="Hidden"/>
+        <TextBlock x:Name="tblResult" HorizontalAlignment="Left" Margin="10,110,10,10" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Visibility="Hidden"/>
+        <WebBrowser x:Name="wbBrowser" HorizontalAlignment="Center" Height="330" Margin="10,137,10,10" VerticalAlignment="Top" Width="780" />
+        <TextBox x:Name="tbCode" HorizontalAlignment="Center" Height="40" Margin="10,69,10,10" TextWrapping="Wrap" Text="Veuillez spécifier le code qui vous est donné par Google une fois que vous vous êtes authentifié." Visibility="Hidden" VerticalAlignment="Top" Width="770" GotFocus="tbCode_GotFocus" LostFocus="tbCode_LostFocus"/>
+        <Button x:Name="btValidateCode" Content="Valider le code" HorizontalAlignment="Center" Margin="10,111,10,10" Width="200" VerticalAlignment="Top" Click="btValidateCode_Click" Visibility="Hidden" />
     </Grid>
 </Window>

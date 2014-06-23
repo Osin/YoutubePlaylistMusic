@@ -9,7 +9,7 @@
         <Button x:Name="btResult" Content="Me connecter à Youtube" HorizontalAlignment="Right" Margin="10,110,10,10" VerticalAlignment="Top" Click="btResult_Click" Visibility="Hidden"/>
         <TextBlock x:Name="tblResult" HorizontalAlignment="Left" Margin="10,110,10,10" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Visibility="Hidden"/>
         <WebBrowser x:Name="wbBrowser" HorizontalAlignment="Center" Height="330" Margin="10,137,10,10" VerticalAlignment="Top" Width="780" />
-        <TextBox x:Name="tbCode" HorizontalAlignment="Center" Height="40" Margin="10,69,10,10" TextWrapping="Wrap" Text="Veuillez spécifier le code qui vous est donné par Google une fois que vous vous êtes authentifié." Visibility="Hidden" VerticalAlignment="Top" Width="770" GotFocus="tbCode_GotFocus" LostFocus="tbCode_LostFocus"/>
+        <TextBox x:Name="tbCode" HorizontalAlignment="Center" Height="40" Margin="10,69,10,10" TextWrapping="Wrap" Text="Veuillez spécifier le code qui vous est donné par Google une fois que vous vous êtes authentifié." Visibility="Hidden" VerticalAlignment="Top" Width="760" GotFocus="tbCode_GotFocus" LostFocus="tbCode_LostFocus"/>
         <Button x:Name="btValidateCode" Content="Valider le code" HorizontalAlignment="Center" Margin="10,111,10,10" Width="200" VerticalAlignment="Top" Click="btValidateCode_Click" Visibility="Hidden" />
     </Grid>
 </Window>

@@ -74,8 +74,7 @@ namespace Youtube_Playlist_Music
                 MessageBoxResult result = MessageBox.Show("Code non specifié", "Veuillez à bien mettre le code fourni par google après la connexion à votre compte", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            this.google_worker.setToken(code);
-            Console.WriteLine(code);
+            this.google_worker.completeAuthRequestUri(code);
         }
 
         private void tbCode_GotFocus(object sender, RoutedEventArgs e)

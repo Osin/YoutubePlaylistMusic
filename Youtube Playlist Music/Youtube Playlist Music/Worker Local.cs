@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Youtube_Playlist_Music
 {
@@ -11,7 +8,7 @@ namespace Youtube_Playlist_Music
     {
         public String rootFolder { get; set; }
         public List<String> files { get; set; }
-        public List<Dictionary<string, string>> database { get; set; }
+        public List<Music> database { get; set; }
 
         public bool generateDataBase()
         {
@@ -19,15 +16,15 @@ namespace Youtube_Playlist_Music
             {
                 return false;
             }
-            this.database = new List<Dictionary<string, string>>();
+            this.database = new List<Music>();
             files.ForEach(delegate(String path)
             {
                 TagLib.File file = TagLib.File.Create(path);
-                Dictionary<string, string> media = new Dictionary<string, string>();
+                
                 string artist = file.Tag.FirstPerformer != null ? file.Tag.FirstPerformer : "";
                 string title = file.Tag.Title != null ? file.Tag.Title : "";
-                media.Add(artist, title);
-                this.database.Add(media);
+                var song = new Music(artist, title);
+                this.database.Add(song);
             });
             return true;
         }

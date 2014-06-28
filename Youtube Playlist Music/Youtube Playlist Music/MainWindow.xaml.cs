@@ -2,8 +2,8 @@
 using Ookii.Dialogs.Wpf;
 using System.IO;
 using System;
-using System.Windows.Navigation;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Youtube_Playlist_Music
 {
@@ -13,10 +13,22 @@ namespace Youtube_Playlist_Music
     public partial class MainWindow : Window
     {
         private Worker_Local local_worker = new Worker_Local();
-        private Worker_Google google_worker = new Worker_Google();
+        private Worker_Youtube youtubeService = new Worker_Youtube();
+        private string playlistTitle { get; set; }
+        private string playlistVisibility { get; set; }
+        private string playlistDescription { get; set; }
+
+        private BackgroundWorker bw = new BackgroundWorker();
+
+
         public MainWindow()
         {
+            //Activer cela si vous voulez sauter la connection à Youtube pour l'authentification
             InitializeComponent();
+            this.bw.WorkerReportsProgress = true;
+            bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+            bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
+            bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -45,48 +57,135 @@ namespace Youtube_Playlist_Music
                 "Je ne sais pas quoi faire pour vous aider, désolé!", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            tblResult.Text = files.Count + " éléments détectés. Veuillez vous connecter à Youtube pour créer votre playlist";
-            btChoseDir.Visibility = Visibility.Hidden;
+            tblResult.Text = files.Count + " éléments détectés";
+            this.setLayoutToYoutubeJob();
+        }
 
+        private void setLayoutToYoutubeJob()
+        {
+            tblResult.Text += " Cliquer sur le bouton pour créer votre playlist";
+            btChoseDir.Visibility = Visibility.Hidden;
+            lTitle.Visibility = Visibility.Visible;
+            tbTitle.Visibility = Visibility.Visible;
+            lVisibility.Visibility = Visibility.Visible;
+            lVisibility.Visibility = Visibility.Visible;
+            rbPrivate.Visibility = Visibility.Visible;
+            rbPublic.Visibility = Visibility.Visible;
             tblResult.Visibility = Visibility.Visible;
             btResult.Visibility = Visibility.Visible;
-            
+            tbDescription.Visibility = Visibility.Visible;
         }
 
+        private void setLayoutToJobWorking()
+        {
+            tblResult.Text = "Taches en cours...";
+            pbProgress.Visibility = Visibility.Visible;
+            lProgress.Visibility = Visibility.Visible;
+            tblResult.Visibility = Visibility.Visible;
+            btChoseDir.Visibility = Visibility.Hidden;
+            lTitle.Visibility = Visibility.Hidden;
+            tbTitle.Visibility = Visibility.Hidden;
+            lVisibility.Visibility = Visibility.Hidden;
+            lVisibility.Visibility = Visibility.Hidden;
+            rbPrivate.Visibility = Visibility.Hidden;
+            rbPublic.Visibility = Visibility.Hidden;
+            btResult.Visibility = Visibility.Hidden;
+            tbDescription.Visibility = Visibility.Hidden;
+        }
         private void btResult_Click(object sender, RoutedEventArgs e)
         {
-            wbBrowser.Source = this.google_worker.getAuthRequestUri();
-            
-            btChoseDir.Visibility = Visibility.Hidden;
-            lbInfos.Visibility = Visibility.Hidden;
-            btResult.Visibility = Visibility.Hidden;
-            tblResult.Visibility = Visibility.Hidden;
-
-            wbBrowser.Visibility = Visibility.Visible;
-            tbCode.Visibility = Visibility.Visible;
-            btValidateCode.Visibility = Visibility.Visible;
+            if (this.playlistVisibility == null)
+                this.playlistVisibility = Worker_Youtube.privacyPrivate;
+            if (this.playlistTitle == null)
+                this.playlistTitle = "Playlist";
+            if (this.playlistDescription == null)
+                this.playlistDescription= "Description";
+            this.setLayoutToJobWorking();
+            if (bw.IsBusy != true)
+            {
+                bw.RunWorkerAsync();
+            }
         }
 
-        private void btValidateCode_Click(object sender, RoutedEventArgs e)
+        private void bw_DoWork(object sender, DoWorkEventArgs e)
         {
-            string code = tbCode.Text.Trim();
-            if (code.Length == 0) {
-                MessageBoxResult result = MessageBox.Show("Code non specifié", "Veuillez à bien mettre le code fourni par google après la connexion à votre compte", MessageBoxButton.OK, MessageBoxImage.Warning);
+            BackgroundWorker worker = sender as BackgroundWorker;
+            int totalElements = this.local_worker.database.Count + 1; //On garde 1 car créer une liste est une action a conserver dans le compteur
+            int index = 0;
+            try
+            {
+                this.youtubeService.init().Wait();
+                var playlist = youtubeService.createPlaylist(this.playlistTitle, this.playlistDescription, this.playlistVisibility);
+                index++;
+                worker.ReportProgress((int) (100 / (totalElements)) * index);            
+                foreach (Music music in this.local_worker.database)
+	            {                
+                    var videos = this.youtubeService.searchVideo(music.artist + " " + music.title);
+                    foreach (var video in videos)
+                    {
+                        this.youtubeService.addVideoToPlaylist(playlist, video);
+                    }
+                    Console.WriteLine(index);
+                    index++;
+                    int percent = (200 * index + 1) / (totalElements * 2);
+                    worker.ReportProgress(percent);
+	            }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.ToString());
+                tblResult.Text = "Erreur durant le traitement de la taches";
                 return;
             }
-            this.google_worker.completeAuthRequestUri(code);
         }
 
-        private void tbCode_GotFocus(object sender, RoutedEventArgs e)
+        private void tbDescription_LostFocus(object sender, RoutedEventArgs e)
         {
-            tbCode.Text = "";
+            if (tbDescription.Text == "")
+            {
+                tbDescription.Text = "Description de votre playlist";
+            }
+            else
+            {
+                this.playlistDescription = tbDescription.Text;
+            }
         }
 
-        private void tbCode_LostFocus(object sender, RoutedEventArgs e)
+        private void tbDescription_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (tbCode.Text == "")
-                tbCode.Text = "Veuillez spécifier le code qui vous est donné par Google une fois que vous vous êtes authentifié.";
+            if (tbDescription.Text == "Description de votre playlist")
+            {
+                tbDescription.Text = ""; 
+            }
         }
 
+        private void RadioButtonPublic_Checked(object sender, RoutedEventArgs e)
+        {
+            rbPrivate.IsChecked = false;
+            this.playlistVisibility = Worker_Youtube.privacyPublic;
+        }
+
+        private void RadioButtonPrivate_Checked(object sender, RoutedEventArgs e)
+        {
+            rbPrivate.IsChecked = true;
+            this.playlistVisibility = Worker_Youtube.privacyPrivate;
+        }
+
+        private void tbTitle_LostFocus(object sender, RoutedEventArgs e)
+        {
+            this.playlistTitle = tbTitle.Text;
+        }
+
+        private void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            this.lProgress.Content = (e.ProgressPercentage.ToString() + "%");
+            this.pbProgress.Value = e.ProgressPercentage;
+            Console.WriteLine(e.ProgressPercentage.ToString());
+        }
+
+        private void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            tblResult.Text = "Terminée";
+        }
     }
 }

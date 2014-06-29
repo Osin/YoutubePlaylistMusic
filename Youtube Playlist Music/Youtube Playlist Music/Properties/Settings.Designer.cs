@@ -22,50 +22,5 @@ namespace Youtube_Playlist_Music.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("697445160793-kuu871jsah3t8sotp73tl5dal2oltf76.apps.googleusercontent.com")]
-        public string ClientId {
-            get {
-                return ((string)(this["ClientId"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("X1u_Vki53iCvakbw-5J30_Hx")]
-        public string ClientSecret {
-            get {
-                return ((string)(this["ClientSecret"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("urn:ietf:wg:oauth:2.0:oob")]
-        public string RedirectUri {
-            get {
-                return ((string)(this["RedirectUri"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://www.googleapis.com/auth/youtube")]
-        public string Scope {
-            get {
-                return ((string)(this["Scope"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("online")]
-        public string AccessType {
-            get {
-                return ((string)(this["AccessType"]));
-            }
-        }
     }
 }

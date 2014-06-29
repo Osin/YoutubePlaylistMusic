@@ -175,7 +175,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="App.config" />
     <Content Include="client_secrets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

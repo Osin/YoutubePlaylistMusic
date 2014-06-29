@@ -23,8 +23,10 @@ namespace Youtube_Playlist_Music
                 
                 string artist = file.Tag.FirstPerformer != null ? file.Tag.FirstPerformer : "";
                 string title = file.Tag.Title != null ? file.Tag.Title : "";
-                var song = new Music(artist, title);
-                this.database.Add(song);
+                if (String.Empty != artist || string.Empty != title) {
+                    var song = new Music(artist, title);
+                    this.database.Add(song);
+                }
             });
             return true;
         }

@@ -6,7 +6,8 @@
         <Label Content="Créer des playlists youtube avec vos musiques" HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Top" FontSize="16"/>
         <Button x:Name="btChoseDir" Content="Choisir" HorizontalAlignment="Right" Margin="0,50,10,0" VerticalAlignment="Top" Click="Button_Click"/>
         <Label x:Name="lbInfos" Content="Dossier contenant ma bibliothèque de musique" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.066,-0.365"/>
-        <Button x:Name="btResult" Content="Fais ton sale boulot" HorizontalAlignment="Right" Margin="0,232,10,0" VerticalAlignment="Top" Click="btResult_Click" Visibility="Hidden"/>
+        <Button x:Name="btResult" Content="Générer la playlist" HorizontalAlignment="Right" Margin="0,232,10,0" VerticalAlignment="Top" Click="btResult_Click" Visibility="Hidden"/>
+        <Button x:Name="btReset" Content="Tout recommencer" HorizontalAlignment="Left" Margin="10,232,0,0" VerticalAlignment="Top" Click="btReset_Click" Visibility="Hidden"/>
         <TextBlock x:Name="tblResult" HorizontalAlignment="Left" Margin="10,77,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Visibility="Visible" Width="360" Height="35" />
         <TextBox x:Name="tbDescription" TextWrapping="Wrap" Text="Description de votre playlist" Width="366" LostFocus="tbDescription_LostFocus" GotFocus="tbDescription_GotFocus" HorizontalAlignment="Right" Margin="0,155,10,46" Visibility="Hidden"/>
         <TextBox x:Name="tbTitle" HorizontalAlignment="Left" Height="23" Margin="49,119,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" LostFocus="tbTitle_LostFocus" Visibility="Hidden"/>

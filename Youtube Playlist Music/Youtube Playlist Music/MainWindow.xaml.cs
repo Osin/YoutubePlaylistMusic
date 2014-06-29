@@ -57,13 +57,13 @@ namespace Youtube_Playlist_Music
                 "Je ne sais pas quoi faire pour vous aider, désolé!", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            tblResult.Text = files.Count + " éléments détectés";
+            tblResult.Text = files.Count + " musiques détectés, " + this.local_worker.database.Count + " musiques reconnues.\n";
             this.setLayoutToYoutubeJob();
         }
 
         private void setLayoutToYoutubeJob()
         {
-            tblResult.Text += " Cliquer sur le bouton pour créer votre playlist";
+            tblResult.Text += "Cliquer sur le bouton pour créer votre playlist";
             btChoseDir.Visibility = Visibility.Hidden;
             lTitle.Visibility = Visibility.Visible;
             tbTitle.Visibility = Visibility.Visible;
@@ -73,7 +73,26 @@ namespace Youtube_Playlist_Music
             rbPublic.Visibility = Visibility.Visible;
             tblResult.Visibility = Visibility.Visible;
             btResult.Visibility = Visibility.Visible;
+            btReset.Visibility = Visibility.Visible;
             tbDescription.Visibility = Visibility.Visible;
+        }
+
+        private void resetLayout()
+        {
+            btChoseDir.Visibility = Visibility.Visible;
+            lTitle.Visibility = Visibility.Hidden;
+            tbTitle.Visibility = Visibility.Hidden;
+            lVisibility.Visibility = Visibility.Hidden;
+            lVisibility.Visibility = Visibility.Hidden;
+            rbPrivate.Visibility = Visibility.Hidden;
+            rbPublic.Visibility = Visibility.Hidden;
+            tblResult.Visibility = Visibility.Hidden;
+            btResult.Visibility = Visibility.Hidden;
+            btReset.Visibility = Visibility.Hidden;
+            tbDescription.Visibility = Visibility.Hidden;
+            pbProgress.Visibility = Visibility.Hidden;
+            lProgress.Visibility = Visibility.Hidden;
+            tblResult.Visibility = Visibility.Hidden;
         }
 
         private void setLayoutToJobWorking()
@@ -91,6 +110,7 @@ namespace Youtube_Playlist_Music
             rbPublic.Visibility = Visibility.Hidden;
             btResult.Visibility = Visibility.Hidden;
             tbDescription.Visibility = Visibility.Hidden;
+            btReset.Visibility = Visibility.Hidden;
         }
         private void btResult_Click(object sender, RoutedEventArgs e)
         {
@@ -107,6 +127,16 @@ namespace Youtube_Playlist_Music
             }
         }
 
+        private void btReset_Click(object sender, RoutedEventArgs e)
+        {
+            this.playlistVisibility = null ;
+            this.playlistTitle = null;
+            this.playlistDescription = null;
+            this.local_worker = new Worker_Local();
+            this.youtubeService = new Worker_Youtube();
+            this.resetLayout();
+        }
+
         private void bw_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
@@ -119,7 +149,8 @@ namespace Youtube_Playlist_Music
                 index++;
                 worker.ReportProgress((int) (100 / (totalElements)) * index);            
                 foreach (Music music in this.local_worker.database)
-	            {                
+	            {
+                    Console.WriteLine(music.artist + " || " + music.title);
                     var videos = this.youtubeService.searchVideo(music.artist + " " + music.title);
                     foreach (var video in videos)
                     {
@@ -134,7 +165,6 @@ namespace Youtube_Playlist_Music
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.ToString());
-                tblResult.Text = "Erreur durant le traitement de la taches";
                 return;
             }
         }
@@ -186,6 +216,7 @@ namespace Youtube_Playlist_Music
         private void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             tblResult.Text = "Terminée";
+            btReset.Visibility = Visibility.Visible;
         }
     }
 }
